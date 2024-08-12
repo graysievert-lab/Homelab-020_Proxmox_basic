@@ -19,7 +19,8 @@ Now any public SSH key signed by the `ssh-iac-usercert` authority would be accep
 
 To test this, let's create a new key pair:
 ```bash
-$ ssh-keygen -l -C "" -N "" -f test
+$ ssh-keygen -q  -C "" -N "" -f test
+$ ssh-keygen -l test
 256 SHA256:DS4IPt3CEVo2B0jiwUT6/Kq6zZTiOCbGeI02Y530Mm0 test.pub (ED25519)
 ```
 
@@ -84,7 +85,7 @@ CA RSA SHA256:Rw7ecBnSJNgidvSA1Bzcft0n2pdPKRBXT1/f8fdjzes
 
 
 ## API access
-To fetch API token from Vault run:  
+To fetch API token from Vault run:
 ```bash
 $ curl \
 --silent \

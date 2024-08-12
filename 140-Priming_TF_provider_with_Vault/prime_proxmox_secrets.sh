@@ -92,19 +92,45 @@ load_public_key(){
 
 # Checks Vault environment
 get_vault_token() {
+    local vault_token
+
     if [ -z "$VAULT_ADDR" ]; then
         error "VAULT_ADDR environment variable is not set."
         return 1
     fi
 
+    # Try loading token either from environment variable or file
     if [ -n "$VAULT_TOKEN" ]; then
-        echo "$VAULT_TOKEN"
+        vault_token="$VAULT_TOKEN"
     elif [ -s "$HOME/.vault-token" ]; then
-        cat "$HOME/.vault-token"
+        vault_token=$(cat "$HOME/.vault-token")
     else
         error "VAULT_TOKEN is not set and $HOME/.vault-token is either empty or does not exist."
         return 1
     fi
+
+    # Fetch token info
+    local curl_result
+    curl_result=$(curl -sS \
+        --header "X-Vault-Token: ${vault_token}" \
+        --request GET \
+        "${VAULT_ADDR}/v1/auth/token/lookup-self")
+
+    if [ $? -ne 0 ]; then
+        error "The curl command failed."
+        return 1
+    fi
+    
+    # Fail if vault returns any error
+    local errors
+    errors=$(echo "${curl_result}" | jq '.errors')
+
+    if [ "$errors" != "null" ] ; then
+        error "Vault token is either invalid or expired."
+        return 1
+    fi
+
+    echo "$vault_token"
 }
 
 

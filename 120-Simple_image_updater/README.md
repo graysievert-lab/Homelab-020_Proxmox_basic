@@ -9,6 +9,7 @@ At this very early stage of our lab we will create a simple VM whose sole purpos
 Log into proxmox shell.
 
 Ensure snippets are enabled in `local` storage.
+
 CAUTION: the command below will configure `local` storage to store `ISO images`, `Container templates`, `VZDump backup files`, `snippets`:
 
 ```bash

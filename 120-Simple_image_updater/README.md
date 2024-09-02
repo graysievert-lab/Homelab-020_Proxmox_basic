@@ -225,7 +225,7 @@ and check that packages are recent
 Leave terminal with `ctrl+o` and destroy the test vm:
 
 ```bash
-$ qm stop 20100 && qm destroy 20000
+$ qm stop 20100 && qm destroy 20100
 ```
 
 Now we should have a base image prepared for the next steps.
